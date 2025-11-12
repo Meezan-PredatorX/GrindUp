@@ -1,5 +1,6 @@
 "use client";
-
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useUser } from "@/lib/context/UserContext";
@@ -11,8 +12,9 @@ type NavLink = {
 }
 
 export default function Sidebar() {
+  const [open, setOpen] = useState(false);
 
-   const {user, loading} = useUser()
+  const {user, loading} = useUser()
 
    let navLinks: NavLink[] = [];
 
@@ -40,9 +42,23 @@ export default function Sidebar() {
          {id:5, name: "Profile", href: "/dashboard/company/profile"},
       ];
    }
-   
-   return (
-      <aside className="fixed top-0 left-0 flex flex-col justify-between w-60 h-screen bg-gray-800 text-white p-4">
+
+  return (
+    <>
+      {/* Mobile Toggle Button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? <X /> : <Menu />}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-screen w-60 bg-gray-800 text-white p-4 z-40 transform 
+        transition-transform duration-300 ease-in-out 
+        ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+      >
          <div className="flex flex-col">
             <h2 className="text-4xl font-bold">GrindUp</h2>
             <div className="mt-10 mb-3 w-full h-[3px] rounded bg-gray-500"></div>
@@ -66,5 +82,6 @@ export default function Sidebar() {
             onClick={handleLogout}
             className="mt-8 w-full bg-red-400 hover:bg-red-600">Logout</Button>
       </aside>
-   );
+    </>
+  );
 }
