@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/client";
+import { supabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -9,9 +9,10 @@ export const LoginForm = () => {
    const [password, setPassword] = useState("");
    const [errorMessage, setErrorMessage] = useState("");
    const router = useRouter();
-
+   
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
+      const supabase = supabaseBrowserClient()
       const { data, error } = await supabase.auth.signInWithPassword({
          email,
          password,
