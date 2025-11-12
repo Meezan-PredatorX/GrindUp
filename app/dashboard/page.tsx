@@ -1,3 +1,5 @@
+"use client";
+
 import { useUser } from "@/lib/context/UserContext";
 import { redirect } from "next/navigation";
 
