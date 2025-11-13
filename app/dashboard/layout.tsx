@@ -22,7 +22,7 @@ export default function DashboardLayout({
   return (
     <div className={`w-full min-h-screen flex overflow-hidden ${poppins.variable}`}>
       <Sidebar />
-      <main className="ml-60 p-6 flex-1 overflow-y-auto">{children}</main>
+      <main className="p-6 flex-1 overflow-y-auto md:ml-60 ">{children}</main>
     </div>
   );
 }

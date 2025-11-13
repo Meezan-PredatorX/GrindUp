@@ -67,6 +67,7 @@ export default function Sidebar() {
                <p className="text-sm">{user?.email}</p>
             </div>
          </div>
+         <div className="mt-10 mb-3 w-full h-[3px] rounded bg-gray-500"></div>
          <nav>
             <ul className="flex flex-col w-full gap-4">
                {
