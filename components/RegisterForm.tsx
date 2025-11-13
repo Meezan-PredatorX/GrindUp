@@ -54,7 +54,7 @@ export const RegisterForm = () => {
    return (
       <form
          onSubmit={handleSubmit}
-         className="flex flex-col space-y-4 w-full max-w-sm p-6 bg-white rounded-xl shadow-md"
+         className="flex flex-col space-y-4 w-full max-w-sm p-6 border border-orange-300 bg-white rounded-xl shadow-md"
       >
          <h1 className="text-xl font-bold text-center">Create your Account</h1>
 
@@ -122,7 +122,7 @@ export const RegisterForm = () => {
          <button
          type="submit"
          disabled={loading}
-         className="mt-3 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+         className="mt-3 bg-orange-600 text-white py-2 rounded hover:bg-orange-700 "
          >
          {loading ? "Creating Account..." : "Register"}
          </button>

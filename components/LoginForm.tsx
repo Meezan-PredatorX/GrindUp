@@ -27,7 +27,7 @@ export const LoginForm = () => {
    return (
       <form 
          onSubmit={handleSubmit}
-         className="flex flex-col space-y-4 w-full max-w-sm p-6 rounded-md shadow-md bg-white">
+         className="flex flex-col space-y-4 w-full max-w-sm p-6 border border-orange-300 rounded-md shadow-md bg-white">
          <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                Email
@@ -61,7 +61,7 @@ export const LoginForm = () => {
          )}
          <button
             type="submit"
-            className="w-full mt-3 py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-3 py-2 px-4 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
          > 
             Login 
          </button>
