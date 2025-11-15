@@ -56,7 +56,7 @@ export const RegisterForm = () => {
          onSubmit={handleSubmit}
          className="flex flex-col space-y-4 w-full max-w-sm p-6 border border-orange-300 bg-white rounded-xl shadow-md"
       >
-         <h1 className="text-xl font-bold text-center">Create your Account</h1>
+         <h1 className="text-xl font-bold text-center">Create your <i>{form.userType}</i> account</h1>
 
          <input
          type="text"
@@ -64,7 +64,7 @@ export const RegisterForm = () => {
          placeholder="Full Name"
          value={form.name}
          onChange={(e) => setForm({ ...form, name: e.target.value })}
-         className="border p-2 rounded"
+         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
          required
          />
 
@@ -74,7 +74,7 @@ export const RegisterForm = () => {
          placeholder="Email Address"
          value={form.email}
          onChange={(e) => setForm({ ...form, email: e.target.value })}
-         className="border p-2 rounded"
+         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
          required
          />
 
@@ -84,7 +84,7 @@ export const RegisterForm = () => {
          placeholder="Password"
          value={form.password}
          onChange={(e) => setForm({ ...form, password: e.target.value })}
-         className="border p-2 rounded"
+         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
          required
          />
          
@@ -94,7 +94,7 @@ export const RegisterForm = () => {
          placeholder="Confirm Password"
          value={form.confirmPassword}
          onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-         className="border p-2 rounded"
+         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
          required
          />
 
@@ -107,10 +107,10 @@ export const RegisterForm = () => {
                onValueChange={(value) => setForm({ ...form, userType: value })}
                defaultValue={form.userType}
             >
-               <SelectTrigger className="w-full border rounded p-2">
+               <SelectTrigger className="w-full rounded p-2 mt-1 border border-gray-300 shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                   <SelectValue placeholder="Select type" />
                </SelectTrigger>
-               <SelectContent className="bg-white">
+               <SelectContent className="bg-white border border-orange-500">
                   <SelectItem value="college">College</SelectItem>
                   <SelectItem value="company">Company</SelectItem>
                </SelectContent>
