@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@/lib/context/UserContext";
-
+import {SpeedInsights} from "@vercel/speed-insights"; 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -20,6 +20,7 @@ export default function RootLayout({children}: {children: React.ReactNode;}) {
       <body className={`${poppins.variable} antialiased`}>
         <UserProvider>
           {children}
+          <SpeedInsights/>
         </UserProvider>
       </body>
     </html>
