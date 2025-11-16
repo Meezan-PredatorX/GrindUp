@@ -72,7 +72,7 @@ export default function CollegePage() {
           jobs.map((job) => (
             <div
               key={job.id}
-              className="p-5 flex flex-col rounded-lg shadow border hover:shadow-lg transition-all duration-200 bg-white"
+              className="p-5 flex flex-col rounded-lg shadow border border-orange-500 hover:shadow-lg transition-all duration-200 bg-white"
             >
               <h2 className="text-2xl font-semibold">{job.role}</h2>
               <p className="text-gray-600 mt-1">{job.company_name}</p>
@@ -84,7 +84,7 @@ export default function CollegePage() {
               <div className="mt-4">
                 <Link
                   href={`/dashboard/college/jobs/${job.id}`}
-                  className="text-blue-600 hover:underline font-medium"
+                  className="text-orange-800 hover:underline font-medium"
                 >
                   View Details →
                 </Link>

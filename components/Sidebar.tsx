@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useUser } from "@/lib/context/UserContext";
+import Image from "next/image";
 
 type NavLink = {
    id:number,
@@ -47,7 +48,7 @@ export default function Sidebar() {
     <>
       {/* Mobile Toggle Button */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded"
+        className="md:hidden fixed top-4 left-4 z-50 bg-orange-50 text-orange-800 p-2 rounded border border-orange-500"
         onClick={() => setOpen(!open)}
       >
         {open ? <X /> : <Menu />}
@@ -55,12 +56,12 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen w-60 bg-gray-800 text-white p-4 z-40 transform 
+        className={`fixed top-0 left-0 h-screen w-60 bg-orange-50 text-orange-800 p-4 z-40 transform 
         transition-transform duration-300 ease-in-out 
         ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
          <div className="flex flex-col">
-            <h2 className="text-4xl font-bold">GrindUp</h2>
+            <Image src="/logo.png" alt="logo" width={80} height={60} className="w-full mt-10"/>
             <div className="mt-10 mb-3 w-full h-[3px] rounded bg-gray-500"></div>
             <div className="flex flex-col gap-2">
                <h4 className="text-xl">Hi, {user?.user_metadata.name}</h4>
@@ -73,7 +74,7 @@ export default function Sidebar() {
                {
                   navLinks.map(({id, name, href}) => (
                      <Link key={id} href={href}>
-                        <li className="w-full p-3 rounded hover:bg-gray-500">{name}</li>
+                        <li className="w-full p-3 rounded hover:bg-orange-200">{name}</li>
                      </Link>
                   ))
                }
@@ -81,7 +82,7 @@ export default function Sidebar() {
          </nav>
          <Button 
             onClick={handleLogout}
-            className="mt-8 w-full bg-red-400 hover:bg-red-600">Logout</Button>
+            className="mt-8 w-full text-white bg-red-400 hover:bg-red-600">Logout</Button>
       </aside>
     </>
   );
