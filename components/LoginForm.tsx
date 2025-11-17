@@ -1,6 +1,7 @@
 "use client";
 
 import { supabaseBrowserClient } from "@/lib/supabase/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,7 +14,7 @@ export const LoginForm = () => {
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       const supabase = supabaseBrowserClient()
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
          email,
          password,
       });
@@ -65,6 +66,10 @@ export const LoginForm = () => {
          > 
             Login 
          </button>
+
+         <p className="flex justify-center text-lg gap-2">Don&apos;t have an account? 
+            <Link href="/register" className="text-orange-500 underline hover:text-orange-800">Register Here</Link>
+         </p>
       </form>
    );
 }

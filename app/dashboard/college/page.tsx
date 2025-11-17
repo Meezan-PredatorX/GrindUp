@@ -10,7 +10,6 @@ export default function CollegePage() {
   const { user, loading } = useUser();
   const supabase = supabaseBrowserClient();
 
-  const [isProfileCompleted, setIsProfileCompleted] = useState<boolean | null>(null);
   const [jobs, setJobs] = useState<any[]>([]);
   const [fetching, setFetching] = useState(true);
 
@@ -18,24 +17,13 @@ export default function CollegePage() {
     const fetchData = async () => {
       if (!user) return;
 
-      // 1️⃣ Fetch profile completion status
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("is_profile_completed")
-        .eq("id", user.id)
-        .single();
-
-      if (userError) console.error("Profile status error:", userError);
-      setIsProfileCompleted(userData?.is_profile_completed ?? false);
-
       // 2️⃣ Fetch job posts
-      const { data: jobsData, error: jobsError } = await supabase
+      const { data: jobsData } = await supabase
         .from("job_posts")
         .select("*")
         .eq("status", "open")
         .order("created_at", { ascending: false });
 
-      if (jobsError) console.error("Job fetch error:", jobsError);
       setJobs(jobsData || []);
       setFetching(false);
     };
@@ -47,12 +35,12 @@ export default function CollegePage() {
 
   return (
     <main className="flex flex-col w-full min-h-full">
-      {!isProfileCompleted && (
+      {!user.user_metadata.isProfileCompleted && (
         <div className="w-full p-3 flex gap-5 items-center rounded border-2 border-yellow-500 bg-yellow-200 text-amber-700">
           <p>Completing your profile can help you get better job opportunities!</p>
           <Link
             href="/dashboard/college/profile"
-            className="p-2 bg-yellow-700 text-white rounded shadow-lg hover:bg-yellow-600"
+            className="p-2 bg-yellow-700 text-white rounded shadow-lg hover:bg-yellow-800"
           >
             Complete your Profile Here
           </Link>

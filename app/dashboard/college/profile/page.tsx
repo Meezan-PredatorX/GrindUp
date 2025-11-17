@@ -26,7 +26,7 @@ export default function CollegeProfile() {
     l3y_placement_perc: 0.0,
     courses_offered: "",
     created_at: "",
-    last_updated: "",
+    last_updated_at: "",
   });
 
   const [formLoading, setFormLoading] = useState(true);
@@ -42,8 +42,7 @@ export default function CollegeProfile() {
           .single();
 
         if (error) {
-          setError("Unable to fetch profile. Please try again.");
-          console.error(error);
+          setError("Error : "+error.message);
         } else {
           setForm(data);
         }
@@ -68,20 +67,20 @@ export default function CollegeProfile() {
       .from("college_profiles")
       .update({
         ...form,
-        last_updated: new Date().toISOString(),
+        last_updated_at: new Date().toISOString(),
       })
       .eq("id", user?.id);
 
     if (error) {
       setError("Error updating profile: " + error.message);
     } else {
-        const { error: userUpdateError } = await supabase
-          .from("users")
-          .update({ is_profile_completed: true })
-          .eq("id", user.id);
+        const { error: userUpdateError } = await supabase.auth.updateUser({
+          data : { isProfileCompleted: true }
+        })
+        
 
         if (userUpdateError) {
-          console.error("Error updating is_profile_completed:", userUpdateError.message);
+          console.error("Error updating isProfileCompleted:", userUpdateError.message);
         }
       alert("Profile updated successfully!");
     }
@@ -93,115 +92,118 @@ export default function CollegeProfile() {
 
   return (
     <main className="p-6 flex flex-col w-full min-h-screen items-center justify-start">
-      {(error) && <p className="w-full p-3 bg-red-300 text-red-700 border-2 border-red-700">{error}!</p>}
-      <h1 className="text-3xl font-bold mb-4">
-        Your College Profile, {user?.user_metadata?.name}
-      </h1>
-
-      <form
-        onSubmit={handleSubmit}
-        className="my-10 w-full md:w-2/3 flex flex-col gap-4 p-8 rounded shadow-lg border-2 border-gray-200"
-      >
-        <InputField
-          label="College Name"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Official Email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Location"
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Mobile No."
-          name="mobile_no"
-          value={form.mobile_no}
-          onChange={handleChange}
-        />
-        <InputField
-          label="No. of Students"
-          name="no_of_students"
-          type="number"
-          value={form.no_of_students}
-          onChange={handleChange}
-        />
-        <InputField
-          label="NAAC Grade"
-          name="naac_grade"
-          value={form.naac_grade}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Affiliated University"
-          name="affiliated_university"
-          value={form.affiliated_university}
-          onChange={handleChange}
-        />
-        <InputField
-          label="TPO Name"
-          name="tpo_name"
-          value={form.tpo_name}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Current highest CGPA"
-          name="current_highest_cgpa"
-          value={form.current_highest_cgpa}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Last 3 years student placed"
-          name="l3y_no_of_students_placed"
-          value={form.l3y_no_of_students_placed}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Last 3 years avg. CTC offered"
-          name="l3y_avg_ctc_offered"
-          value={form.l3y_avg_ctc_offered}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Last 3 years placement %"
-          name="l3y_placement_perc"
-          value={form.l3y_placement_perc}
-          onChange={handleChange}
-        />
-        <div className="flex w-full items-center gap-5">
-          <label htmlFor="courses_offered" className="w-40 font-medium">
-            Courses Offered
-          </label>
-          <textarea
-            name="courses_offered"
-            value={form.courses_offered}
-            onChange={handleChange}
-            className="flex-1 w-full border p-2 rounded"
-            required
-          />
-        </div>
-
-        <div className="mt-3 flex items-center justify-between">
-          <p className="text-gray-600">
-            <strong>Last Updated:</strong>{" "}
-            {form.last_updated ? form.last_updated.substring(0, 10) : "N/A"}
-          </p>
-          <Button
-            type="submit"
-            disabled={formLoading}
-            className="bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg"
+      {
+        (error) ? <p className="w-full p-3 rounded bg-red-300 text-red-700 border-2 border-red-700">{error}!</p> :
+        (<>
+          <h1 className="text-3xl font-bold mb-4">
+            Your College Profile, {user?.user_metadata?.name}
+          </h1>
+          <form
+            onSubmit={handleSubmit}
+            className="my-3 w-full lg:w-2/3 flex flex-col gap-4 p-8 rounded shadow-lg border-2 border-gray-200"
           >
-            {formLoading ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
-      </form>
+            <InputField
+              label="College Name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Official Email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Location"
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Mobile No."
+              name="mobile_no"
+              value={form.mobile_no}
+              onChange={handleChange}
+            />
+            <InputField
+              label="No. of Students"
+              name="no_of_students"
+              type="number"
+              value={form.no_of_students}
+              onChange={handleChange}
+            />
+            <InputField
+              label="NAAC Grade"
+              name="naac_grade"
+              value={form.naac_grade}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Affiliated University"
+              name="affiliated_university"
+              value={form.affiliated_university}
+              onChange={handleChange}
+            />
+            <InputField
+              label="TPO Name"
+              name="tpo_name"
+              value={form.tpo_name}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Current highest CGPA"
+              name="current_highest_cgpa"
+              value={form.current_highest_cgpa}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Last 3 years student placed"
+              name="l3y_no_of_students_placed"
+              value={form.l3y_no_of_students_placed}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Last 3 years avg. CTC offered"
+              name="l3y_avg_ctc_offered"
+              value={form.l3y_avg_ctc_offered}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Last 3 years placement %"
+              name="l3y_placement_perc"
+              value={form.l3y_placement_perc}
+              onChange={handleChange}
+            />
+            <div className="flex w-full items-center gap-5">
+              <label htmlFor="courses_offered" className="w-40 font-medium">
+                Courses Offered
+              </label>
+              <textarea
+                name="courses_offered"
+                value={form.courses_offered}
+                onChange={handleChange}
+                className="flex-1 w-full border p-2 rounded"
+                required
+              />
+            </div>
+
+            <div className="mt-3 flex items-center justify-between">
+              <p className="text-gray-600">
+                <strong>Last Updated:</strong>{" "}
+                {form.last_updated_at ? form.last_updated_at.substring(0, 10) : "N/A"}
+              </p>
+              <Button
+                type="submit"
+                disabled={formLoading}
+                className="bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg"
+              >
+                {formLoading ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </form>
+        </>)
+      }
     </main>
   );
 }

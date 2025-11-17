@@ -5,42 +5,53 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabaseBrowserClient } from "../supabase/client";
 
 type UserContextType = {
-   user: any,
-   loading: boolean
+   user: any;
+   loading: any;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined)
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({children} : {children: React.ReactNode}) => {
-   const supabase = supabaseBrowserClient();
-   const [user, setUser] = useState<any>(null);
-   const [loading, setLoading] = useState(false);
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const supabase = supabaseBrowserClient();
 
-   useEffect (() => {
-      const getUser = async () => {
-         const {data:{user}} = await supabase.auth.getUser();
-         setUser(user ?? null);
-         setLoading(false);
-      };
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-      getUser();
+  useEffect(() => {
+    let mounted = true;
 
-      const {data:{subscription}} = supabase.auth.onAuthStateChange(() => {
-         getUser();
-      })
+    const loadUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (mounted) {
+        setUser(user ?? null);
+        setLoading(false);
+      }
+    };
 
-      return () => subscription.unsubscribe();
-   }, [supabase]);
+    loadUser();
 
-   return (
-      <UserContext.Provider value={{user, loading}}>
-         {children}
-      </UserContext.Provider>
-   );
+    const { data: { subscription } } =
+      supabase.auth.onAuthStateChange((_event: any, session: { user: any; }) => {
+        if (mounted) {
+          setUser(session?.user ?? null);
+        }
+      });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
+
+  return (
+    <UserContext.Provider value={{ user, loading }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUser = () => {
-   const context = useContext(UserContext);
-   if (!context) throw new Error('useUser must be used within a UserProvider');
-   return context;
+   const ctx = useContext(UserContext);
+   if (!ctx) throw new Error("useUser must be inside UseProvider");
+   return ctx;
 }
