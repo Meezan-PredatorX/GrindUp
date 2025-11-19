@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { useUser } from "@/lib/context/UserContext";
 import Image from "next/image";
 
 type NavLink = {
@@ -12,10 +11,18 @@ type NavLink = {
    href:string
 }
 
-export default function Sidebar() {
-  const [open, setOpen] = useState(false);
+type UserType = {
+   id: string,
+   email: string
+   user_metadata : {
+      name: string,
+      userType: string,
+      isProfileCompleted: string
+   }
+}
 
-  const {user, loading} = useUser()
+export default function Sidebar({user}:{user:UserType}) {
+  const [open, setOpen] = useState(false);
 
    let navLinks: NavLink[] = [];
 
@@ -23,10 +30,6 @@ export default function Sidebar() {
       await fetch("/api/logout", { method: "POST" });
       window.location.href = "/";
    };
-
-   if (loading) {
-      return <p>Loading...</p>;
-   }
 
    if (user?.user_metadata.userType === "college") {
       navLinks = [

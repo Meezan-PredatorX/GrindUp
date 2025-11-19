@@ -4,3 +4,9 @@
    scroll-behavior: smooth;
    scrollbar-width: none;
 }
+
+
+@layer {
+   input[type="file"] {
+   @apply accent-orange-500 }  
+}

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { UserProvider } from "@/lib/context/UserContext";
 import {SpeedInsights} from "@vercel/speed-insights/next"; 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,12 +15,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode;}) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${poppins.variable} antialiased`}>
-        <UserProvider>
           {children}
           <SpeedInsights/>
-        </UserProvider>
       </body>
     </html>
   );

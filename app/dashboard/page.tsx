@@ -1,14 +1,11 @@
-"use client";
-
-import { useUser } from "@/lib/context/UserContext";
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export default function Dashboard() {
+export default async function DashboardPage () {
+   const supabase = await createClient();
+   const {data:{user}} = await supabase.auth.getUser();
+   const userType = user?.user_metadata.userType;
 
-  const {user, loading} = useUser();
-
-  if (user?.user_metadata.userType === "college") redirect("/dashboard/college");
-  if (user?.user_metadata.userType === "company") redirect("/dashboard/company");
-
-  return null;
-};
+   if (userType === 'college') return redirect('/dashboard/college');
+   if (userType === 'company') return redirect('/dashboard/company');
+}

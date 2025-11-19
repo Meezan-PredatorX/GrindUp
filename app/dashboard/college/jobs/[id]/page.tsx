@@ -92,7 +92,7 @@ export default async function JobPage ({ params }:any) {
                <div>
                <p className="font-semibold">Job Description:</p>
                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-               {job.job_description}
+               {job.description}
                </p>
                </div>
 

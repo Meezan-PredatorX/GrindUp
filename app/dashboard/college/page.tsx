@@ -1,37 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
-import { supabaseBrowserClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { useUser } from "@/lib/context/UserContext";
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
-export default function CollegePage() {
-  const { user, loading } = useUser();
-  const supabase = supabaseBrowserClient();
+export default async function CollegePage() {
+  const supabase = await createClient();
+  const {data:{user}} = await supabase.auth.getUser();
 
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [fetching, setFetching] = useState(true);
+  if (!(user?.user_metadata.userType === 'college')) redirect('/dashboard');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return;
-
-      // 2️⃣ Fetch job posts
-      const { data: jobsData } = await supabase
-        .from("job_posts")
-        .select("*")
-        .eq("status", "open")
-        .order("created_at", { ascending: false });
-
-      setJobs(jobsData || []);
-      setFetching(false);
-    };
-
-    if (!loading) fetchData();
-  }, [user, loading, supabase]);
-
-  if (fetching) return <p className="p-5">Loading dashboard...</p>;
+  // 2️⃣ Fetch job posts
+  const { data: jobsData } = await supabase
+    .from("job_posts")
+    .select("*")
+    .eq("status", "open")
+    .order("created_at", { ascending: false });
 
   return (
     <main className="flex flex-col w-full min-h-full">
@@ -54,17 +37,17 @@ export default function CollegePage() {
 
       {/* 🧩 Job Cards */}
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs.length === 0 ? (
+        {!jobsData ? (
           <p>No job posts available right now.</p>
         ) : (
-          jobs.map((job) => (
+          jobsData.map((job: any) => (
             <div
               key={job.id}
               className="p-5 flex flex-col rounded-lg shadow border border-orange-500 hover:shadow-lg transition-all duration-200 bg-white"
             >
               <h2 className="text-2xl font-semibold">{job.role}</h2>
               <p className="text-gray-600 mt-1">{job.company_name}</p>
-              <p className="mt-2 text-gray-800 line-clamp-3">{job.job_description}</p>
+              <p className="mt-2 text-gray-800 line-clamp-3">{job.description}</p>
               <div className="mt-3 flex justify-between text-sm text-gray-500">
                 <span>{job.location}</span>
                 <span>{job.employment_type}</span>

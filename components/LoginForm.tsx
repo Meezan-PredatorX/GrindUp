@@ -14,6 +14,7 @@ export const LoginForm = () => {
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       const supabase = supabaseBrowserClient()
+      const {data:{user}} = await supabase.auth.getUser();
       const { error } = await supabase.auth.signInWithPassword({
          email,
          password,
@@ -21,7 +22,7 @@ export const LoginForm = () => {
       if (error) {
          setErrorMessage(error.message);
       } else {
-         router.push("/dashboard");
+         return router.push('/dashboard')
       }
    }
 
